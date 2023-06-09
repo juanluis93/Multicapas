@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agenda</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            margin: 0;
+            padding: 1em;
+            background-color: #009688;
+            color: #fff;
+        }
+        
+        table {
+            border-collapse: collapse;
+            margin: 1em auto;
+            width: 80%;
+            max-width: 800px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        
+        td, th {
+            border: 1px solid #ddd;
+            padding: 0.8em;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #009688;
+            color: #fff;
+        }
+        
+        form {
+            margin: 1em auto;
+            width: 80%;
+            max-width: 800px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            padding: 1em;
+        }
+        
+        label {
+            flex-basis: 100%;
+            margin-bottom: 0.5em;
+        }
+        
+        input[type=text] {
+            padding: 0.5em;
+            margin-right: 1em;
+            flex-basis: calc(33.33% - 1em);
+            box-sizing: border-box;
+        }
+        
+        input[type=submit] {
+            padding: 0.5em 1em;
+            background-color: #009688;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        input[type=submit]:hover {
+            background-color: #00796b;
+        }
+        
+        .error {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 0.5em;
+            flex-basis: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Agenda</h1>
+    <form id="formulario-contacto">
+        <label>Nombre:</label>
+        <input type="text" name="nombre" required>
+        <br>
+        <label>Apellido:</label>
+        <input type="text" name="apellido" required>
+        <br>
+        <label>Teléfono:</label>
+        <input type="text" name="telefono" required>
+        <br>
+        <input type="submit" value="Agregar">
+    </form>
+    
+    <script>
+        // Obtener el formulario
+        const formulario = document.getElementById('formulario-contacto');
+        
+        // Manejar la solicitud de agregar un nuevo contacto
+        formulario.addEventListener('submit', (evento) => {
+            evento.preventDefault(); // Prevenir que el formulario se envíe automáticamente
+            
+            // Obtener los datos del formulario
+            const nombre = formulario.nombre.value;
+            const apellido = formulario.apellido.value;
+            const telefono = formulario.telefono.value;
+            
+            // Crear un objeto con los datos del contacto
+            const contacto = { nombre, apellido, telefono };
+            alert('contacto: ' + JSON.stringify(contacto));
+            
+            // Enviar los datos al servidor
+            fetch("http://www.raydelto.org/agenda.php", {
+                method: 'POST',
+                body: JSON.stringify(contacto)
+            })
+            .then((respuesta) => respuesta.json())
+            .then((datos) => {
+                alert('datos: ' + JSON.stringify(datos));
+                
+                // Mostrar una alerta con la respuesta del servidor
+                alert(datos.mensaje);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            
+            // Limpiar los campos del formulario
+            formulario.reset();
+        });
+    </script>
+</body>
+</html>
